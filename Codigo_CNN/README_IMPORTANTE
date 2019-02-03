@@ -1,0 +1,10 @@
+Si no entrenáis antes para generar la carpeta modelo con los pesos y modelo (.h5),
+no podréis usar la interfaz donde se usa la función predict (predict.py).
+
+¿Cómo entrenarla?
+Usamos TF (asegurarse de tener todo bien instalado)
+Ejecutar train.py y a continuación ya podremos ejecutar Clasify_Cat_or_Dog.py
+
+Esperamos que os guste,
+
+Icia Carro Barallobre && Lucía Álvarez Crespo
