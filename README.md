@@ -15,6 +15,6 @@ A simple and easy CNN implementation which classifies between dogs and cats thro
 * [Icia Carro Barallobre](https://github.com/IciaCarroBarallobre)
 
 ## Licensing
-This project is licensed under the Apache License. See [LICENSE](https://github.com/luciamariaalvarezcrespo/poster-ipt-2019/blob/master/LICENSE) for the full license text.
+This project is licensed under the MIT License. See [LICENSE](https://github.com/luciamariaalvarezcrespo/poster-ipt-2019/blob/master/LICENSE) for the full license text.
 
 <br>
