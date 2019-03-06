@@ -10,6 +10,16 @@ A simple and easy CNN implementation which classifies between dogs and cats thro
 * TensorFlow
 * Keras
 
+## Useful commands
+Make sure you're running the latest version of pip
+```
+python -m pip install --upgrade pip
+```
+Install TensorFlow for Python
+```
+pip install tensorflow
+````
+
 ## Developers
 * [Lucía María Álvarez Crespo](https://github.com/luciamariaalvarezcrespo)
 * [Icia Carro Barallobre](https://github.com/IciaCarroBarallobre)
