@@ -1,4 +1,4 @@
-![logo](https://avatars0.githubusercontent.com/u/15658638?s=200&v=4) Easy TensorFlow CNN
+![logo](https://cdn-images-1.medium.com/max/672/1*cKG1LJvVTaWqSkYSyVqtsQ.png) Easy TensorFlow CNN
 ===========
 Poster for the [IPT event](https://ipt.acm.org/) March 2019 held by the ACM-W at [FIC-UDC (A Coruña)](https://www.fic.udc.es/)
 
