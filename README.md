@@ -10,15 +10,28 @@ A simple and easy CNN implementation which classifies between dogs and cats thro
 * TensorFlow
 * Keras
 
-## Useful commands
-Make sure you're running the latest version of pip
+## Useful commands (Windows only)
+1. Download [Python](https://www.python.org/downloads/windows/) and install it adding *pip* to your ```%PATH%``` environmental variable
+2. Make sure you're running the latest version of pip
 ```
 python -m pip install --upgrade pip
 ```
-Install TensorFlow for Python
+3. Install the TensorFlow *pip* dependencies
 ```
-pip install tensorflow
-````
+pip3 install six numpy wheel
+pip3 install keras_applications==1.0.6 --no-deps
+pip3 install keras_preprocessing==1.0.5 --no-deps
+```
+4. Install [Bazel](https://docs.bazel.build/versions/master/install-windows.html) and set it up to build C++
+5. Then run this on the MSYS2 shell
+```
+pacman -Syu
+pacman -Su
+pacman -S git patch unzip
+```
+6. Install [Visual C++ Build Tools 2015](https://visualstudio.microsoft.com/es/vs/older-downloads/?rr=https%3A%2F%2Fwww.tensorflow.org%2Finstall%2Fsource_windows)
+* Microsoft Visual C++ 2015 Redistributable Update 3
+* Microsoft Build Tools 2015 Update 3
 
 ## Developers
 * [Lucía María Álvarez Crespo](https://github.com/luciamariaalvarezcrespo)
