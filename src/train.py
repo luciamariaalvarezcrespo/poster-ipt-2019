@@ -1,8 +1,8 @@
-#Poster IPT_ACM_2019
-#Autoras: Icia Carro Barallobre && Lucia Alvarez Crespo
-############ Librerias #######
-import sys
-import os
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import sys, os
+
 from tensorflow.python.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.python.keras import optimizers
 from tensorflow.python.keras.models import Sequential
@@ -10,80 +10,91 @@ from tensorflow.python.keras.layers import Dropout, Flatten, Dense, Activation
 from tensorflow.python.keras.layers import  Convolution2D, MaxPooling2D
 from tensorflow.python.keras import backend as K
 
-K.clear_session()
+class Train:
 
+    TRAIN_DATA = './data/train'
+    VALIDATION_DATA = './data/validation'
 
+    EPOCHS = 5
+    WIDTH = 150
+    HEIGHT = 150
+    BATCH_SIZE = 32
+    STEPS = 500
+    VALIDATION_STEPS = 300
+    FILTERS_FIRST_CONV = 32
+    FILTERS_SECOND_CONV = 64
+    SIZE_FIRST_FILTER = (3, 3)
+    SIZE_SECOND_FILTER = (2, 2)
+    POOL_SIZE = (2, 2)
+    CLASSES = 2
+    LR = 0.0004
+  
+    @classmethod
+    def preprocess_images(self):
 
-data_entrenamiento = './data/entrenamiento'
-data_validacion = './data/validacion'
+        self.training_datagen = ImageDataGenerator(
+            rescale = 1./255,
+            shear_range = 0.2,
+            zoom_range = 0.2,
+            horizontal_flip = True)
 
-"""
-Parameters
-"""
-epocas=5
-longitud, altura = 150, 150
-batch_size = 32
-pasos = 500
-validation_steps = 300
-filtrosConv1 = 32
-filtrosConv2 = 64
-tamano_filtro1 = (3, 3)
-tamano_filtro2 = (2, 2)
-tamano_pool = (2, 2)
-clases = 2
-lr = 0.0004
+        self.test_datagen = ImageDataGenerator(rescale = 1./255)
 
+        self.training_generator = self.training_datagen.flow_from_directory(
+            os.path.join(sys.path[0],Train.TRAIN_DATA),
+            target_size = (Train.HEIGHT, Train.WIDTH),
+            batch_size = Train.BATCH_SIZE,
+            class_mode = 'categorical')
 
-##Preparamos nuestras imagenes
+        self.validation_generator = self.test_datagen.flow_from_directory(
+            os.path.join(sys.path[0],Train.VALIDATION_DATA),
+            target_size = (Train.HEIGHT, Train.WIDTH),
+            batch_size = Train.BATCH_SIZE,
+            class_mode = 'categorical')
+        
+        return (self.training_generator, self.validation_generator)
 
-entrenamiento_datagen = ImageDataGenerator(
-    rescale=1. / 255,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True)
+    @classmethod
+    def train_cnn(self):
 
-test_datagen = ImageDataGenerator(rescale=1. / 255)
+        (self.training_generator, self.validation_generator) = Train.preprocess_images()
 
-entrenamiento_generador = entrenamiento_datagen.flow_from_directory(
-    data_entrenamiento,
-    target_size=(altura, longitud),
-    batch_size=batch_size,
-    class_mode='categorical')
+        K.clear_session()
 
-validacion_generador = test_datagen.flow_from_directory(
-    data_validacion,
-    target_size=(altura, longitud),
-    batch_size=batch_size,
-    class_mode='categorical')
+        self.cnn = Sequential()
+        self.cnn.add(Convolution2D(Train.FILTERS_FIRST_CONV, Train.SIZE_FIRST_FILTER, padding = "same", input_shape = (Train.HEIGHT, Train.WIDTH, 3), activation = 'relu'))
+        self.cnn.add(MaxPooling2D(pool_size = Train.POOL_SIZE))
 
-cnn = Sequential()
-cnn.add(Convolution2D(filtrosConv1, tamano_filtro1, padding ="same", input_shape=(longitud, altura, 3), activation='relu'))
-cnn.add(MaxPooling2D(pool_size=tamano_pool))
+        self.cnn.add(Convolution2D(Train.FILTERS_SECOND_CONV, Train.SIZE_SECOND_FILTER, padding = "same"))
+        self.cnn.add(MaxPooling2D(pool_size = Train.POOL_SIZE))
 
-cnn.add(Convolution2D(filtrosConv2, tamano_filtro2, padding ="same"))
-cnn.add(MaxPooling2D(pool_size=tamano_pool))
+        self.cnn.add(Flatten())
+        self.cnn.add(Dense(256, activation = 'relu'))
+        self.cnn.add(Dropout(0.5))
+        self.cnn.add(Dense(Train.CLASSES, activation = 'softmax'))
 
-cnn.add(Flatten())
-cnn.add(Dense(256, activation='relu'))
-cnn.add(Dropout(0.5))
-cnn.add(Dense(clases, activation='softmax'))
+        self.cnn.compile(loss = 'categorical_crossentropy',
+            optimizer = optimizers.Adam(lr = Train.LR),
+            metrics = ['accuracy'])
 
-cnn.compile(loss='categorical_crossentropy',
-            optimizer=optimizers.Adam(lr=lr),
-            metrics=['accuracy'])
+        self.cnn.fit_generator(
+            self.training_generator,
+            steps_per_epoch = Train.STEPS,
+            epochs = Train.EPOCHS,
+            validation_data = self.validation_generator,
+            validation_steps = Train.VALIDATION_STEPS)
+        
+        return self.cnn
 
+    @classmethod
+    def create_model(self):
 
+        self.cnn = Train.train_cnn()        
 
-
-cnn.fit_generator(
-    entrenamiento_generador,
-    steps_per_epoch=pasos,
-    epochs=epocas,
-    validation_data=validacion_generador,
-    validation_steps=validation_steps)
-
-target_dir = './modelo/'
-if not os.path.exists(target_dir):
-  os.mkdir(target_dir)
-cnn.save('./modelo/modelo.h5')
-cnn.save_weights('./modelo/pesos.h5')
+        target_dir = './model/'
+        
+        if not os.path.exists(target_dir):
+            os.mkdir(target_dir)
+        
+        self.cnn.save('./model/model.h5')
+        self.cnn.save_weights('./model/weights.h5')

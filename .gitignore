@@ -2,3 +2,5 @@
 \.vscode/
 
 tensorflow/
+
+*.h5

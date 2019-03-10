@@ -1,19 +1,20 @@
-#Poster IPT_ACM_2019
-#Autoras: Icia Carro Barallobre && Lucia Alvarez Crespo
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-############ Librerias #######
-from gi.repository import Gtk
 import os
 import sys
-import predict
+import gi
+gi.require_version("Gtk", "3.0")
 
+from gi.repository import Gtk
+from predict import Predict
 
-class Clasify_Cat_or_Dog():
+class Clasify():
     
-    box = None
-    window = None
-    box_img_topredict = None
-    image = None
+    BOX = None
+    WINDOW = None
+    BOX_IMG_TO_PREDICT = None
+    IMAGE = None
     
     def __init__(self):
 		
@@ -31,23 +32,22 @@ class Clasify_Cat_or_Dog():
 
         #GIF:
         image = Gtk.Image()
-        image.set_from_file("giphy.gif")
+        image.set_from_file("Olaf.gif")
         self.box.add(image)
 
         #Bottom to choose image:
         button = Gtk.Button("Pls, Could you show me a photo (jpeg/jpg) of a cat or a dog?")
         button.connect("clicked", self.on_open_clicked)
         self.box.add(button)
-
         
         self.window.show_all()
 
     def on_open_clicked(self, button):
 		
-        if (not (self.box_img_topredict == None) and (not(self.image == None))):
-          self.box.remove(self.box_img_topredict)
+        if (not (self.BOX_IMG_TO_PREDICT == None) and (not(self.IMAGE == None))):
+          self.box.remove(self.BOX_IMG_TO_PREDICT)
           
-        self.box_img_topredict = Gtk.Box()       
+        self.BOX_IMG_TO_PREDICT = Gtk.Box()       
          
         dialog = Gtk.FileChooserDialog("Open Image", button.get_toplevel(), Gtk.FileChooserAction.OPEN)
         dialog.add_button(Gtk.STOCK_CANCEL, 0)
@@ -65,18 +65,18 @@ class Clasify_Cat_or_Dog():
           self.image = Gtk.Image()
           self.image.set_from_file(dialog.get_filename())
           
-          self.box_img_topredict.add(self.image)
-          self.box_img_topredict.set_size_request(150,150)            
+          self.BOX_IMG_TO_PREDICT.add(self.image)
+          self.BOX_IMG_TO_PREDICT.set_size_request(150,150)            
           
           #CNN:
-          result = predict.predict(dialog.get_filename())
+          result = Predict.predict(dialog.get_filename())
           if  result == 0:
             button.set_label("I see a CAT, Could you show me a photo (jpeg/jpg) of a cat or a dog? ")
           elif result == 1:
             button.set_label("I see a DOG, Could you show me a photo (jpeg/jpg) of a cat or a dog?")
                 
 
-          self.box.add(self.box_img_topredict)
+          self.box.add(self.BOX_IMG_TO_PREDICT)
           self.window.show_all()  
         else: 
           button.set_label("It isn't a photo(jpeg/jpg), Could you show me a photo of a cat or a dog?")
@@ -85,9 +85,8 @@ class Clasify_Cat_or_Dog():
     def destroy(self, window):
         Gtk.main_quit()
 
-
 def main():
-    app = Clasify_Cat_or_Dog()
+    app = Clasify()
     Gtk.main()
 
 if __name__ == '__main__':
