@@ -1,4 +1,4 @@
-![logo]([https://repository-images.githubusercontent.com/369019455/8cd0a300-d749-11eb-927e-5d110355fd89](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)) Easy TensorFlow CNN
+![logo](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white) Easy TensorFlow CNN
 ===========
 Poster for the [IPT event](https://ipt.acm.org/) March 2019 held by the [ACM-W](https://women.acm.org/) at [FIC-UDC (A Coruña)](https://www.fic.udc.es/)
 
